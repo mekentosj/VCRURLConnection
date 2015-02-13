@@ -23,6 +23,13 @@
 
 #import <Foundation/Foundation.h>
 
+@interface NSData (VCRDeprecated)
+
+- (NSString *)base64Encoding;
+- (id)initWithBase64Encoding:(NSString *)base64String;
+
+@end
+
 @interface VCRError : NSError
 
 + (id)JSONForError:(NSError *)error;
