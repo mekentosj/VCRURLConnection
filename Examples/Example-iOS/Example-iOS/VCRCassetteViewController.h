@@ -1,5 +1,5 @@
 //
-// VCRCassetteManagerTests.m
+// VCRCassetteController.h
 //
 // Copyright (c) 2012 Dustin Barker
 //
@@ -21,44 +21,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "VCRCassetteManagerTests.h"
-#import "VCRCassetteManager.h"
-#import "VCRCassette.h"
+#import <VCRURLConnection/VCRCassette.h>
+#import <UIKit/UIKit.h>
 
+@interface VCRCassetteViewController : UIViewController
 
-@interface VCRCassetteManagerTests ()
-@property (nonatomic, strong) VCRCassetteManager *manager;
-@end
-
-
-@implementation VCRCassetteManagerTests
-
-- (void)setUp {
-    [super setUp];
-    self.manager = [[VCRCassetteManager alloc] init];
-}
-
-- (void)tearDown {
-    self.manager = nil;
-    [super tearDown];
-}
-
-- (void)testSetCurrentCassetteWithURL {
-
-#if TARGET_OS_IPHONE
-    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"cassette-1" ofType:@"json"];
-#else
-    NSString *path = @"Tests/cassette-1.json";
-#endif
-    
-    NSURL *url = [NSURL fileURLWithPath:path];
-    
-    NSData *data = [NSData dataWithContentsOfURL:url];
-    XCTAssertTrue(data != nil, @"Could not load cassette %@", url);
-    VCRCassette *expectedCassette = [[VCRCassette alloc] initWithData:data];
-    [self.manager setCurrentCassetteURL:url];
-    
-    XCTAssertEqualObjects(self.manager.currentCassette, expectedCassette, @"Should set cassette with URL");
-}
+@property (nonatomic, strong) VCRCassette *cassette;
 
 @end

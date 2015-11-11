@@ -1,5 +1,5 @@
 //
-// VCRCassetteController.h
+// VCRResponseViewController.h
 //
 // Copyright (c) 2012 Dustin Barker
 //
@@ -21,11 +21,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "VCRCassette.h"
+#import <VCRURLConnection/VCRRecording.h>
 #import <UIKit/UIKit.h>
 
-@interface VCRCassetteViewController : UIViewController
+@interface VCRRecordingViewController : UIViewController
 
-@property (nonatomic, strong) VCRCassette *cassette;
+@property (nonatomic, strong) VCRRecording *recording;
 
 @end

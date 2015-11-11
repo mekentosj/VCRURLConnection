@@ -1,5 +1,5 @@
 //
-// VCRAppDelegate.m
+// VCRCassetteManagerTests.m
 //
 // Copyright (c) 2012 Dustin Barker
 //
@@ -21,32 +21,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "VCRAppDelegate.h"
-
-#import "VCRViewController.h"
-#import "VCR.h"
-
-@implementation VCRAppDelegate
+#import "VCRCassetteManagerTests.h"
+#import "VCRCassetteManager.h"
+#import "VCRCassette.h"
 
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+@interface VCRCassetteManagerTests ()
+@property (nonatomic, strong) VCRCassetteManager *manager;
+@end
+
+
+@implementation VCRCassetteManagerTests
+
+- (void)setUp {
+    [super setUp];
+    self.manager = [[VCRCassetteManager alloc] init];
+}
+
+- (void)tearDown {
+    self.manager = nil;
+    [super tearDown];
+}
+
+- (void)testSetCurrentCassetteWithURL {
+    NSString *path = [[NSBundle bundleForClass:[self class]] pathForResource:@"cassette-1" ofType:@"json"];
+    NSURL *url = [NSURL fileURLWithPath:path];
+    NSData *data = [NSData dataWithContentsOfURL:url];
+    XCTAssertTrue(data != nil, @"Could not load cassette %@", url);
+    VCRCassette *expectedCassette = [[VCRCassette alloc] initWithData:data];
+    [self.manager setCurrentCassetteURL:url];
     
-    [VCR start];
-    NSString *cassettePath = [[NSBundle mainBundle] pathForResource:@"cassette" ofType:@"json"];
-    [VCR loadCassetteWithContentsOfURL:[NSURL fileURLWithPath:cassettePath]];
-    
-    VCRCassetteViewController *cassetteViewController = [[VCRCassetteViewController alloc] init];
-    cassetteViewController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-    cassetteViewController.cassette = [VCR cassette];
-    
-    self.viewController = [[VCRViewController alloc] initWithNibName:@"VCRViewController" bundle:nil];
-    self.viewController.cassetteViewController = cassetteViewController;
-    
-    self.window.rootViewController = self.viewController;
-    [self.window makeKeyAndVisible];
-
-    return YES;
+    XCTAssertEqualObjects(self.manager.currentCassette, expectedCassette, @"Should set cassette with URL");
 }
 
 @end

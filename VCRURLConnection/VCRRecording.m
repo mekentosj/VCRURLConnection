@@ -26,8 +26,6 @@
 #import "VCRError.h"
 #if TARGET_OS_IPHONE
 #import <MobileCoreServices/MobileCoreServices.h>
-#else
-#import <CoreServices/CoreServices.h>
 #endif
 
 // For -[NSData initWithBase64Encoding:] and -[NSData base64Encoding]
@@ -66,6 +64,15 @@
     return [self.method isEqualToString:recording.method] &&
            [self.URI isEqualToString:recording.URI] &&
            [self.body isEqualToString:recording.body];
+}
+
+- (NSUInteger)hash {
+    const NSUInteger prime = 17;
+    NSUInteger hash = 1;
+    hash = prime * hash + [self.method hash];
+    hash = prime * hash + [self.URI hash];
+    hash = prime * hash + [self.body hash];
+    return hash;
 }
 
 - (BOOL)isText {

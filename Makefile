@@ -1,25 +1,28 @@
-CONFIGURATION ?= "Debug"
+NAME = VCRURLConnection
 BUILD_DIR = $(shell pwd)/build
 
-clean:
-	$(XCMD) clean
-	rm -rf $(BUILD_DIR)
+test:
+	xcodebuild \
+	-sdk $(SDK) \
+	-derivedDataPath $(BUILD_DIR) \
+	-project $(NAME).xcodeproj \
+	-scheme $(SCHEME) \
+	-configuration Debug \
+	 -destination $(DEST) \
+	test
 
-_test:
-	xctool -sdk $(SDK) \
-               -project VCRURLConnection.xcodeproj \
-	       -scheme $(SCHEME) \
-               -configuration $(CONFIGURATION) \
-	       CONFIGURATION_BUILD_DIR=$(BUILD_DIR) \
-	       test
-
-test_ios:
-	$(MAKE) SDK=iphonesimulator SCHEME=Tests-iOS _test
+test_iphonesimulator:
+	$(MAKE) SDK=iphonesimulator SCHEME=libVCRURLConnection DEST="\"platform=iOS Simulator,name=iPhone 6\""
 
 test_osx:
-	$(MAKE) SDK=macosx SCHEME=Tests-OSX _test
+	$(MAKE) SCHEME=VCRURLConnection SDK=macosx DEST="arch=x86_64"
 
-test:
-	$(MAKE) test_ios test_osx
+ci: test_iphonesimulator test_osx
+
+clean:
+	rm -rf build
+
+
+
 
 
